@@ -6,6 +6,8 @@ import 'package:codeunion_test/presentation/widgets/const.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../widgets/alert_dialog.dart';
+
 @RoutePage()
 class AuthPage extends StatefulWidget {
   const AuthPage({super.key});
@@ -71,9 +73,14 @@ class _AuthPageState extends State<AuthPage> {
                     await userRepository.signIn(email, password);
 
                 if (credentials != null) {
-                  AutoRouter.of(context).replace(ProfileRoute());
+                  AutoRouter.of(context).replace(const ProfileRoute());
                 } else {
-                  return;
+                  showDialog(
+                    context: context,
+                    builder: (_) => const CustomAlertDialog(
+                      title: 'Ошибка',
+                    ),
+                  );
                 }
               },
             ),

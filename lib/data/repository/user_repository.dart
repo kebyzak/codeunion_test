@@ -5,7 +5,6 @@ import '../../presentation/models/user.dart';
 class UserRepository {
   final Dio _dio = Dio();
   final String baseUrl = 'http://45.10.110.181:8080';
-  User? _loggedInUser;
 
   UserRepository() {
     _dio.interceptors.add(InterceptorsWrapper(
@@ -17,9 +16,6 @@ class UserRepository {
     ));
   }
 
-  void clearUserData() {
-    _loggedInUser = null;
-  }
 
   Future<User?> signIn(String email, String password) async {
     try {
@@ -36,14 +32,12 @@ class UserRepository {
         final String? accessToken = responseData['tokens']['accessToken'];
         final Map<String, dynamic>? user = responseData['user'];
 
-        if (user != null) {
+        if (accessToken != null && user != null) {
           final String? nicknameData = user['nickname'];
           final String? emailData = user['email'];
 
           if (nicknameData != null && emailData != null) {
-            final loggedInUser = User(nickname: nicknameData, email: emailData);
-            _loggedInUser = loggedInUser;
-            return loggedInUser;
+            return User(nickname: nicknameData, email: emailData);
           }
         }
       }

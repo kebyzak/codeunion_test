@@ -62,7 +62,9 @@ class ProfilePage extends StatelessWidget {
                 ),
                 error: () => const Text('error'),
                 loggedOut: () {
-                  AutoRouter.of(context).replace(AuthRoute());
+                  userBloc.email = null;
+                  userBloc.password = null;
+                  AutoRouter.of(context).replace(const AuthRoute());
                   return null;
                 },
               ),

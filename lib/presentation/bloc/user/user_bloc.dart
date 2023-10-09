@@ -12,8 +12,8 @@ part 'user_event.dart';
 
 class UserBloc extends Bloc<UserEvent, UserState> {
   final UserRepository userRepository;
-  final String email;
-  final String password;
+  String? email;
+  String? password;
 
   UserBloc(this.userRepository, this.email, this.password)
       : super(const UserState.initial()) {
@@ -21,9 +21,15 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       await Future.delayed(const Duration(seconds: 2));
       emit(const UserState.initial());
     });
+
     on<_FetchUserData>((event, emit) async {
+      if (email == null || password == null) {
+        emit(const UserState.error());
+        return;
+      }
+
       emit(const UserState.loading());
-      final user = await userRepository.signIn(email, password);
+      final user = await userRepository.signIn(email!, password!);
       if (user != null) {
         emit(UserState.success(user));
       } else {
@@ -31,8 +37,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       }
     });
     on<_Logout>((event, emit) async {
-      await Future.delayed(const Duration(seconds: 2));
-      userRepository.clearUserData();
       emit(const UserState.loggedOut());
     });
   }
