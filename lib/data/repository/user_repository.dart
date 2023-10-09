@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-
 import '../../presentation/models/user.dart';
 
 class UserRepository {
@@ -8,33 +7,24 @@ class UserRepository {
 
   UserRepository() {
     _dio.interceptors.add(InterceptorsWrapper(
-      onRequest: (options, handler) async {
-        final authToken = await getAuthToken();
-        options.headers['Authorization'] = 'Bearer $authToken';
-        return handler.next(options);
-      },
+      onRequest: _addAuthTokenHeader,
     ));
   }
 
-
   Future<User?> signIn(String email, String password) async {
     try {
-      final data = {
-        'email': email,
-        'password': password,
-      };
-
+      final data = {'email': email, 'password': password};
       final response =
           await _dio.post('$baseUrl/api/v1/auth/login', data: data);
 
       if (response.statusCode == 200) {
-        final Map<String, dynamic> responseData = response.data;
-        final String? accessToken = responseData['tokens']['accessToken'];
-        final Map<String, dynamic>? user = responseData['user'];
+        final responseData = response.data;
+        final accessToken = responseData['tokens']['accessToken'];
+        final user = responseData['user'];
 
         if (accessToken != null && user != null) {
-          final String? nicknameData = user['nickname'];
-          final String? emailData = user['email'];
+          final nicknameData = user['nickname'];
+          final emailData = user['email'];
 
           if (nicknameData != null && emailData != null) {
             return User(nickname: nicknameData, email: emailData);
@@ -43,9 +33,16 @@ class UserRepository {
       }
 
       return null;
-    } catch (e) {
+    } catch (_) {
       return null;
     }
+  }
+
+  Future<void> _addAuthTokenHeader(
+      RequestOptions options, RequestInterceptorHandler handler) async {
+    final authToken = await getAuthToken();
+    options.headers['Authorization'] = 'Bearer $authToken';
+    handler.next(options);
   }
 
   Future<String> getAuthToken() async {

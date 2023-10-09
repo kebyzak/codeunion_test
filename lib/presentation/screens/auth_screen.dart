@@ -10,7 +10,7 @@ import '../widgets/alert_dialog.dart';
 
 @RoutePage()
 class AuthPage extends StatefulWidget {
-  const AuthPage({super.key});
+  const AuthPage({Key? key});
 
   @override
   State<AuthPage> createState() => _AuthPageState();

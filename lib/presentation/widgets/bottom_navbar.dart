@@ -32,22 +32,24 @@ class BottomNavbar extends StatelessWidget {
         return CupertinoTabBar(
           currentIndex: currentIndex,
           onTap: (index) => _onTabTapped(context, index),
+          activeColor: const Color(0xFF4631D2),
+          inactiveColor: CupertinoColors.black,
           items: const [
             BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.news),
-              label: 'Feed',
+              icon: Icon(CupertinoIcons.pencil_outline),
+              label: 'Лента',
             ),
             BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.map),
-              label: 'Map',
+              icon: Icon(CupertinoIcons.map_pin_ellipse),
+              label: 'Карта',
             ),
             BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.star),
-              label: 'Favorites',
+              icon: Icon(CupertinoIcons.heart),
+              label: 'Избранные',
             ),
             BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.profile_circled),
-              label: 'Profile',
+              icon: Icon(CupertinoIcons.person_circle),
+              label: 'Профиль',
             ),
           ],
         );

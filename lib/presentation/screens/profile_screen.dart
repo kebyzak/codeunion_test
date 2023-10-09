@@ -1,10 +1,10 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:codeunion_test/presentation/routes/router.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../bloc/user/user_bloc.dart';
+import '../routes/router.dart';
 import '../widgets/bottom_navbar.dart';
 import '../widgets/const.dart';
 
@@ -15,7 +15,6 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final userBloc = BlocProvider.of<UserBloc>(context);
-
     userBloc.add(const UserEvent.fetchUserData());
 
     return BlocBuilder<UserBloc, UserState>(
@@ -62,8 +61,6 @@ class ProfilePage extends StatelessWidget {
                 ),
                 error: () => const Text('error'),
                 loggedOut: () {
-                  userBloc.email = null;
-                  userBloc.password = null;
                   AutoRouter.of(context).replace(const AuthRoute());
                   return null;
                 },

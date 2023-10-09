@@ -5,9 +5,7 @@ import '../../../data/repository/user_repository.dart';
 import '../../models/user.dart';
 
 part 'user_bloc.freezed.dart';
-
 part 'user_state.dart';
-
 part 'user_event.dart';
 
 class UserBloc extends Bloc<UserEvent, UserState> {
@@ -36,6 +34,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         emit(const UserState.error());
       }
     });
+
     on<_Logout>((event, emit) async {
       emit(const UserState.loggedOut());
     });
